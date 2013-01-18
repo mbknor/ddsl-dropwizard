@@ -1,0 +1,6 @@
+ddslConfig:
+  zookeeperHosts: localhost:2181
+  serviceId:
+    environment: test
+    name: ddsl-example
+    version: 1.0
