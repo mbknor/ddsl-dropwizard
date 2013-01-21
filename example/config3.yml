@@ -1,17 +1,17 @@
 http:
-  port: 8080
-  adminPort: 8080
+  port: 8082
+  adminPort: 8082
 
 ddslConfig:
   zookeeperHosts: localhost:2181
   serviceId:
     environment: test
-    name: ddsl-example
+    name: ddsl-example-other
     version: 1.0
 
-serviceName: main-service
+serviceName: other-service
 
 otherService:
     environment: test
-    name: ddsl-example-other
+    name: ddsl-example
     version: 1.0

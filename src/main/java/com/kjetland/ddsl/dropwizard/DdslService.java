@@ -3,9 +3,7 @@ package com.kjetland.ddsl.dropwizard;
 import com.kjetland.ddsl.DdslClient;
 import com.kjetland.ddsl.DdslClientCacheReadsImpl;
 import com.kjetland.ddsl.DdslClientImpl;
-import com.kjetland.ddsl.model.Service;
-import com.kjetland.ddsl.model.ServiceId;
-import com.kjetland.ddsl.model.ServiceLocation;
+import com.kjetland.ddsl.model.*;
 import com.kjetland.ddsl.utils.NetUtils;
 import com.yammer.dropwizard.config.Configuration;
 import com.yammer.dropwizard.config.HttpConfiguration;
@@ -72,11 +70,15 @@ public class DdslService implements Managed{
 
         ServiceLocation sl = new ServiceLocation(url, ddslConfig.serviceQuality, new DateTime(), null);
 
-        ServiceId serviceId = new ServiceId(ddslConfig.serviceId.environment, ddslConfig.serviceId.serviceType, ddslConfig.serviceId.name, ddslConfig.serviceId.version);
+        ServiceId serviceId = translate(ddslConfig.serviceId);
 
         this.serviceObject = new Service(serviceId, sl);
 
         ddslClient.serviceUp(serviceObject);
+    }
+
+    protected ServiceId translate(DdslServiceId ddslServiceId) {
+        return new ServiceId(ddslServiceId.environment, ddslServiceId.serviceType, ddslServiceId.name, ddslServiceId.version);
     }
 
     @Override
@@ -85,5 +87,25 @@ public class DdslService implements Managed{
             logger.info("Removing this service from DDSL");
             ddslClient.serviceDown(serviceObject);
         }
+    }
+
+    public DdslClient getDdslClient() {
+        return ddslClient;
+    }
+
+    public String getBestLocationUrl(DdslServiceId ddslServiceId) {
+
+        if ( ddslConfig.serviceId == null ) {
+            throw new RuntimeException("When asking DDSL for other services, you also have to specify who your service is - ddslConfig.serviceId is not specified in config.");
+        }
+
+        ServiceId serviceId = translate(ddslServiceId);
+
+        ClientId clientId = new ClientId( ddslConfig.serviceId.environment, ddslConfig.serviceId.name, ddslConfig.serviceId.version, null );
+        ServiceRequest sr = new ServiceRequest(serviceId, clientId);
+
+        ServiceLocation sl = ddslClient.getBestServiceLocation(sr);
+
+        return sl.url();
     }
 }

@@ -21,8 +21,9 @@ public class HelloWorldService extends Service<HelloWorldConfiguration> {
 
     @Override
     public void run(HelloWorldConfiguration helloWorldConfiguration, Environment environment) throws Exception {
-        environment.addResource( new HelloWorldResource(helloWorldConfiguration.getHttpConfiguration()) );
-        environment.manage( new DdslService( helloWorldConfiguration.getHttpConfiguration(), helloWorldConfiguration.ddslConfig) );
+        DdslService ddslService = new DdslService( helloWorldConfiguration.getHttpConfiguration(), helloWorldConfiguration.ddslConfig);
+        environment.addResource( new HelloWorldResource(helloWorldConfiguration, ddslService) );
+        environment.manage( ddslService );
     }
 
 
