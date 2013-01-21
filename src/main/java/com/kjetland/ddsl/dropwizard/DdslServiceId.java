@@ -20,4 +20,20 @@ public class DdslServiceId {
     @JsonProperty
     @NotNull
     public String version;
+
+    public DdslServiceId() {
+    }
+
+    public DdslServiceId(String environment, String name, String version) {
+        this.environment = environment;
+        this.name = name;
+        this.version = version;
+    }
+
+    public DdslServiceId(String environment, String name, String version, String serviceType) {
+        this.environment = environment;
+        this.name = name;
+        this.version = version;
+        this.serviceType = serviceType;
+    }
 }
