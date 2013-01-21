@@ -7,14 +7,11 @@ start the main service listening on 8080:
 
     java -jar target/dropwizard-example-1.0.jar server config.yml
 
-Start one other service listening on 8081:
+Start one other service listening on random port:
 
     java -jar target/dropwizard-example-1.0.jar server config2.yml
 
-Start another other service listening on 8082:
-
-    java -jar target/dropwizard-example-1.0.jar server config3.yml
-
+Start as many other services as you like..
 
 All apps has two urls:
 

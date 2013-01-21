@@ -5,26 +5,30 @@ import com.kjetland.ddsl.DdslClientCacheReadsImpl;
 import com.kjetland.ddsl.DdslClientImpl;
 import com.kjetland.ddsl.model.*;
 import com.kjetland.ddsl.utils.NetUtils;
-import com.yammer.dropwizard.config.Configuration;
-import com.yammer.dropwizard.config.HttpConfiguration;
 import com.yammer.dropwizard.lifecycle.Managed;
+import com.yammer.dropwizard.lifecycle.ServerLifecycleListener;
+import org.eclipse.jetty.server.Connector;
+import org.eclipse.jetty.server.Server;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class DdslService implements Managed{
+import java.util.concurrent.atomic.AtomicBoolean;
+
+public class DdslService implements Managed, ServerLifecycleListener {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
 
-    private final HttpConfiguration httpConfiguration;
+    // Will get value when jetty is started
+    public Integer httpPort = null; // lazy
+    private final AtomicBoolean serviceUpExecuted = new AtomicBoolean(false);
     private final DdslConfig ddslConfig;
 
     private final DdslClient ddslClient;
 
     private Service serviceObject = null;
 
-    public DdslService(HttpConfiguration httpConfiguration, DdslConfig ddslConfig) {
-        this.httpConfiguration = httpConfiguration;
+    public DdslService(DdslConfig ddslConfig) {
         this.ddslConfig = ddslConfig;
 
         DdslClient realDdslClient = new DdslClientImpl(new DropwizardDdslConfig());
@@ -51,30 +55,47 @@ public class DdslService implements Managed{
     }
 
     @Override
+    public void serverStarted(Server server) {
+        // Detect the port jetty is listening on - works with configured- and random-port
+        for (Connector connector : server.getConnectors()) {
+            if ( "main".equals( connector.getName() )) {
+                this.httpPort = connector.getLocalPort();
+                executeServiceUp();
+            }
+        }
+    }
+
+    @Override
     public void start() throws Exception {
+        executeServiceUp();
+    }
 
-        logger.info("Using DDSL with zookeeper hosts: " + ddslConfig.zookeeperHosts);
+    private void executeServiceUp() {
+        // We might want to call this method again after we have the jetty port..
+        if ( httpPort != null && serviceUpExecuted.compareAndSet(false, true) ) {
+            logger.info("Using DDSL with zookeeper hosts: " + ddslConfig.zookeeperHosts);
 
-        if ( ddslConfig.serviceId == null) {
-            logger.debug("serviceId not specified for this service - not announcing it to DDSL");
-            return ;
+            if ( ddslConfig.serviceId == null) {
+                logger.debug("serviceId not specified for this service - not announcing it to DDSL");
+                return ;
+            }
+            // Do we use configured url or do we resolve it?
+            String url = ddslConfig.serviceUrl;
+            if ( url == null ) {
+                url = "http://" + NetUtils.resolveLocalPublicIP() + ":" + httpPort +"/";
+                logger.debug("serviceUrl not specified - resolving url: " + url);
+            }
+
+            logger.info("Announcing serviceUp to ddsl for service " + " with url: " + url);
+
+            ServiceLocation sl = new ServiceLocation(url, ddslConfig.serviceQuality, new DateTime(), null);
+
+            ServiceId serviceId = translate(ddslConfig.serviceId);
+
+            this.serviceObject = new Service(serviceId, sl);
+
+            ddslClient.serviceUp(serviceObject);
         }
-        // Do we use configured url or do we resolve it?
-        String url = ddslConfig.serviceUrl;
-        if ( url == null ) {
-            url = "http://" + NetUtils.resolveLocalPublicIP() + ":" + httpConfiguration.getPort()+"/";
-            logger.debug("serviceUrl not specified - resolving url: " + url);
-        }
-
-        logger.info("Announcing serviceUp to ddsl for service " + " with url: " + url);
-
-        ServiceLocation sl = new ServiceLocation(url, ddslConfig.serviceQuality, new DateTime(), null);
-
-        ServiceId serviceId = translate(ddslConfig.serviceId);
-
-        this.serviceObject = new Service(serviceId, sl);
-
-        ddslClient.serviceUp(serviceObject);
     }
 
     protected ServiceId translate(DdslServiceId ddslServiceId) {
@@ -83,10 +104,6 @@ public class DdslService implements Managed{
 
     @Override
     public void stop() throws Exception {
-        if ( serviceObject != null) {
-            logger.info("Removing this service from DDSL");
-            ddslClient.serviceDown(serviceObject);
-        }
     }
 
     public DdslClient getDdslClient() {

@@ -1,6 +1,6 @@
 http:
-  port: 8081
-  adminPort: 8081
+  port: 0
+  adminPort: 0
 
 ddslConfig:
   zookeeperHosts: localhost:2181

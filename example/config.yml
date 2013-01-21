@@ -4,6 +4,7 @@ http:
 
 ddslConfig:
   zookeeperHosts: localhost:2181
+  #serviceUrl: http://public.example.com:port/
   serviceId:
     environment: test
     name: ddsl-example

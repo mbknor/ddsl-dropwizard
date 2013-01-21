@@ -29,14 +29,14 @@ public class HelloWorldResource {
     private final HelloWorldConfiguration config;
     private final DdslService ddslService;
 
-    public HelloWorldResource(HelloWorldConfiguration httpConfiguration, DdslService ddslService) {
-        config = httpConfiguration;
+    public HelloWorldResource(HelloWorldConfiguration config, DdslService ddslService) {
+        this.config = config;
         this.ddslService = ddslService;
     }
 
     @GET
     public String sayHello() {
-        return "Hello world from " + config.serviceName + " on " + NetUtils.resolveLocalPublicIP() + ":" + config.getHttpConfiguration().getPort();
+        return "Hello world from " + config.serviceName + " on " + NetUtils.resolveLocalPublicIP() + ":" + ddslService.httpPort;
     }
 
     @Path("fromOther")
