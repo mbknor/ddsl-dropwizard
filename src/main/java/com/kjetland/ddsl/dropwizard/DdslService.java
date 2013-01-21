@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class DdslService implements Managed, ServerLifecycleListener {
+public class DdslService implements ServerLifecycleListener {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -65,11 +65,6 @@ public class DdslService implements Managed, ServerLifecycleListener {
         }
     }
 
-    @Override
-    public void start() throws Exception {
-        executeServiceUp();
-    }
-
     private void executeServiceUp() {
         // We might want to call this method again after we have the jetty port..
         if ( httpPort != null && serviceUpExecuted.compareAndSet(false, true) ) {
@@ -100,10 +95,6 @@ public class DdslService implements Managed, ServerLifecycleListener {
 
     protected ServiceId translate(DdslServiceId ddslServiceId) {
         return new ServiceId(ddslServiceId.environment, ddslServiceId.serviceType, ddslServiceId.name, ddslServiceId.version);
-    }
-
-    @Override
-    public void stop() throws Exception {
     }
 
     public DdslClient getDdslClient() {

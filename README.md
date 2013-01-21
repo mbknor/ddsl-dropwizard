@@ -42,12 +42,9 @@ Configure it like this in your yml-file:
 Initialize it in your Service class:
 
         @Override
-        public void run(HelloWorldConfiguration helloWorldConfiguration, Environment environment) throws Exception {
-            DdslService ddslService = new DdslService(
-                helloWorldConfiguration.getHttpConfiguration(),
-                helloWorldConfiguration.ddslConfig);
-
-            environment.manage( ddslService );
+        public void run(HelloWorldConfiguration config, Environment environment) throws Exception {
+            DdslService ddslService = new DdslService( config.ddslConfig);
+            environment.addServerLifecycleListener( ddslService );
         }
 
 
