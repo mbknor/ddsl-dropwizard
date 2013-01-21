@@ -10,6 +10,21 @@ Example
 
 Have a look at the Dropwizard [example](https://github.com/mbknor/ddsl-dropwizard/tree/master/example) application.
 
+How to use it in your own code
+=============================
+
+Maven dependency
+------------------------------
+
+You need to add the following dependency to your pom.xml:
+
+        <dependency>
+            <groupId>com.kjetland.ddsl</groupId>
+            <artifactId>ddsl-dropwizard</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+
 
 Announce your service
 -------------------------------

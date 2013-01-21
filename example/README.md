@@ -3,6 +3,10 @@ Example Dropwizard service using DDSL
 
 Make sure zookeeper is running on localhost.
 
+Build and package the example app:
+
+    mvn package
+
 start the main service listening on 8080:
 
     java -jar target/dropwizard-example-1.0.jar server config.yml
@@ -19,8 +23,8 @@ All apps has two urls:
     GET /fromOther
 
 
-Main service uses one of other-servicer on /fromOther - refresh multiple times - see that it changes which service is used..
+The main service uses HttpClient to call one of the other-services on /fromOther - refresh multiple times - see that it changes which service is used..
 
 Try to change ports and see that it automatically still works.
 
-Other-servicees uses main-service on /fromOther
+Other-services uses main-service on /fromOther
