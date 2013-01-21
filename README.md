@@ -2,13 +2,13 @@ DDSL plugin for Dropwizard
 ===============================
 
 This is a plugin for Dropwizard that makes it really easy to enable Service Discovery to your
-services using DDSL.
+services using [DDSL](https://github.com/mbknor/ddsl).
 
 
 Example
 -----------------------------
 
-Have a look at the Dropwizard example application.
+Have a look at the Dropwizard [example](https://github.com/mbknor/ddsl-dropwizard/tree/master/example) application.
 
 
 Announce your service
