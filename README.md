@@ -21,8 +21,19 @@ You need to add the following dependency to your pom.xml:
         <dependency>
             <groupId>com.kjetland.ddsl</groupId>
             <artifactId>ddsl-dropwizard</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>1.0</version>
         </dependency>
+
+
+Since DDSL and this plugin is hosed on my own maven repo here on github, you also have to add this to your pom:
+
+        <repositories>
+            <repository>
+                <id>mbknor</id>
+                <name>mbknor</name>
+                <url>http://mbknor.github.com/m2repo/releases</url>
+            </repository>
+        </repositories>
 
 
 

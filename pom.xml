@@ -5,7 +5,7 @@
 
 	<groupId>com.kjetland.ddsl</groupId>
 	<artifactId>ddsl-dropwizard</artifactId>	
-	<version>1.0-SNAPSHOT</version>
+	<version>1.0</version>
 	<packaging>jar</packaging>
 
 	<dependencies>
@@ -42,7 +42,14 @@
         </repository>
     </repositories>
 
-
+    <distributionManagement>
+        <repository>
+            <id>mbk_mvn_repo</id>
+            <layout>default</layout>
+            <name>mbk_mvn_repo</name>
+            <url>file://localhost/Users/mbknor/projects/mbknor/mbknor.github.com/m2repo/releases</url>
+        </repository>
+    </distributionManagement>
 
 
 
