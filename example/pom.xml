@@ -60,6 +60,15 @@
         </dependency>
 	</dependencies>
 
+    <repositories>
+        <repository>
+            <id>mbknor</id>
+            <name>mbknor</name>
+            <url>http://mbknor.github.com/m2repo/releases</url>
+        </repository>
+    </repositories>
+
+
 
 
 </project>
