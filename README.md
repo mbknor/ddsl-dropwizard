@@ -75,7 +75,7 @@ Initialize it in your Service class:
 
 
 When your app starts, it will resolve the url to your app and register it in DDSL.
-Now other apps can discover it using ddsl, or you can use ddslConfigWriter to automatically (re)configure an nginx reverse-proxy
+Now other apps can discover it using ddsl, or you can use [ddslConfigWriter](https://github.com/mbknor/ddslConfigWriter) to automatically (re)configure an nginx reverse-proxy
 to start to send trafic to it. You can auto-scale.
 
 
