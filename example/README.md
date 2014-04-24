@@ -9,11 +9,11 @@ Build and package the example app:
 
 start the main service listening on 8080:
 
-    java -jar target/dropwizard-example-1.0.jar server config.yml
+    java -jar target/dropwizard-example-2.0.jar server config.yml
 
 Start one other service listening on random port:
 
-    java -jar target/dropwizard-example-1.0.jar server config2.yml
+    java -jar target/dropwizard-example-2.0.jar server config2.yml
 
 Start as many other services as you like..
 

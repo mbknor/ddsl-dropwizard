@@ -5,6 +5,11 @@ This is a plugin for Dropwizard that makes it really easy to enable Service Disc
 services using [DDSL](https://github.com/mbknor/ddsl).
 
 
+Note about versions
+-----------------------
+
+Use version 2.0 if you are using Dropwizard 0.7.0 and version 1.0 if using Dropwizard 0.6.1
+
 Example
 -----------------------------
 
@@ -21,11 +26,11 @@ You need to add the following dependency to your pom.xml:
         <dependency>
             <groupId>com.kjetland.ddsl</groupId>
             <artifactId>ddsl-dropwizard</artifactId>
-            <version>1.0</version>
+            <version>2.0</version>
         </dependency>
 
 
-Since DDSL and this plugin is hosed on my own maven repo here on github, you also have to add this to your pom:
+Since DDSL and this plugin is hosted on my own maven repo here on github, you also have to add this to your pom:
 
         <repositories>
             <repository>
@@ -40,7 +45,7 @@ Since DDSL and this plugin is hosed on my own maven repo here on github, you als
 Announce your service
 -------------------------------
 
-This is how easy it is to enbable Service Discovery announcing for your Dropwizard service
+This is how easy it is to enable Service Discovery announcing for your Dropwizard service
 
 
 Add DdslConfig to your configuration class:
@@ -70,13 +75,13 @@ Initialize it in your Service class:
         @Override
         public void run(HelloWorldConfiguration config, Environment environment) throws Exception {
             DdslService ddslService = new DdslService( config.ddslConfig);
-            environment.addServerLifecycleListener( ddslService );
+            environment.lifecycle().addServerLifecycleListener( ddslService );
         }
 
 
 When your app starts, it will resolve the url to your app and register it in DDSL.
 Now other apps can discover it using ddsl, or you can use [ddslConfigWriter](https://github.com/mbknor/ddslConfigWriter) to automatically (re)configure an nginx reverse-proxy
-to start to send trafic to it. You can auto-scale.
+to start to send traffic to it. You can auto-scale.
 
 
 Discover other services
