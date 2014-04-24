@@ -1,6 +1,10 @@
-http:
-  port: 0
-  adminPort: 0
+server:
+  applicationConnectors:
+  - type: http
+    port:
+  adminConnectors:
+  - type: http
+    port:
 
 ddslConfig:
   zookeeperHosts: localhost:2181

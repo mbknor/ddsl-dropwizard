@@ -3,7 +3,7 @@ package com.kjetland.ddsl.dropwizard_example;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.kjetland.ddsl.dropwizard.DdslConfig;
 import com.kjetland.ddsl.dropwizard.DdslServiceId;
-import com.yammer.dropwizard.config.Configuration;
+import io.dropwizard.Configuration;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;

@@ -5,10 +5,10 @@ import com.kjetland.ddsl.DdslClientCacheReadsImpl;
 import com.kjetland.ddsl.DdslClientImpl;
 import com.kjetland.ddsl.model.*;
 import com.kjetland.ddsl.utils.NetUtils;
-import com.yammer.dropwizard.lifecycle.Managed;
-import com.yammer.dropwizard.lifecycle.ServerLifecycleListener;
+import io.dropwizard.lifecycle.ServerLifecycleListener;
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.ServerConnector;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,8 +58,8 @@ public class DdslService implements ServerLifecycleListener {
     public void serverStarted(Server server) {
         // Detect the port jetty is listening on - works with configured- and random-port
         for (Connector connector : server.getConnectors()) {
-            if ( "main".equals( connector.getName() )) {
-                this.httpPort = connector.getLocalPort();
+            if ( "application".equals( connector.getName() )) {
+                this.httpPort = ((ServerConnector)connector).getLocalPort();
                 executeServiceUp();
             }
         }

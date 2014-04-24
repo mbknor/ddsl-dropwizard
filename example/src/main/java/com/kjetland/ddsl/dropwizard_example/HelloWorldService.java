@@ -1,11 +1,11 @@
 package com.kjetland.ddsl.dropwizard_example;
 
 import com.kjetland.ddsl.dropwizard.DdslService;
-import com.yammer.dropwizard.Service;
-import com.yammer.dropwizard.config.Bootstrap;
-import com.yammer.dropwizard.config.Environment;
+import io.dropwizard.Application;
+import io.dropwizard.setup.Bootstrap;
+import io.dropwizard.setup.Environment;
 
-public class HelloWorldService extends Service<HelloWorldConfiguration> {
+public class HelloWorldService extends Application<HelloWorldConfiguration> {
 
     public static void main(String[] args) throws Exception {
         new HelloWorldService().run(args);
@@ -22,9 +22,9 @@ public class HelloWorldService extends Service<HelloWorldConfiguration> {
     @Override
     public void run(HelloWorldConfiguration helloWorldConfiguration, Environment environment) throws Exception {
         DdslService ddslService = new DdslService( helloWorldConfiguration.ddslConfig);
-        environment.addServerLifecycleListener( ddslService );
+        environment.lifecycle().addServerLifecycleListener( ddslService );
 
-        environment.addResource( new HelloWorldResource(helloWorldConfiguration, ddslService) );
+        environment.jersey().register( new HelloWorldResource(helloWorldConfiguration, ddslService) );
     }
 
 
